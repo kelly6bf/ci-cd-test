@@ -20,12 +20,10 @@ jobs:
         
     - name: make prod application.yml
       run: |
-        cd ./src/main/resources
+        rm -rf ./src/main/resources/application.yml
+        touch ./src/main/resources/application.yml
 
-        rm -f ./application.yml
-        touch ./application.yml
-
-        echo ${{secrets.PRODYML}} | base64 --decode > ./application.yml
+        echo ${{secrets.PRODYML}} | base64 --decode > ./src/main/resources/application.yml
       shell: bash
 
     - name: Gradle Caching
@@ -62,5 +60,5 @@ jobs:
         script_stop: true
         script: |
           docker compose -f $COMPOSE down
-          docker pull ${{ secrets.DOCKER_REPO }}/coduo_springboot_app:latest
+          docker pull ${{secrets.DOCKER_REPO}}/coduo_springboot_app:latest
           docker compose -f $COMPOSE up -d
