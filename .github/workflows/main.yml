@@ -29,7 +29,7 @@ jobs:
       with:
         host port: 3306
         container port: 3306
-        mysql database: 'test'
+        mysql database: 'test_db'
         mysql root password: testPw1234!
         
     - name: make test application.yml
