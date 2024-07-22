@@ -42,4 +42,9 @@ public class TestApi {
 
         return id + " 데이터 제거 완료.";
     }
+
+    @GetMapping("/secret")
+    public String getSecret() {
+        return "네가.. 여길 어떻게...?";
+    }
 }
