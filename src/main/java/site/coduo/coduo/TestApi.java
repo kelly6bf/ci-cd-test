@@ -47,4 +47,9 @@ public class TestApi {
     public String getSecret() {
         return "네가.. 여길 어떻게...?";
     }
+
+    @GetMapping("/kelly")
+    public String getKelly() {
+        return "난.... '켈리'다.";
+    }
 }
