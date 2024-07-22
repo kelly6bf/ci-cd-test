@@ -54,7 +54,7 @@ public class TestApi {
     }
 
     @GetMapping("/elmo")
-    public String getKelly() {
+    public String getElmo() {
         return "난.... '엘모' 입니다... 켈리가 아니야....";
     }
 
