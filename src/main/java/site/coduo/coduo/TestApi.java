@@ -62,4 +62,9 @@ public class TestApi {
     public String getHack() {
         return "당신.. '해킹' 당한거야...";
     }
+
+    @GetMapping("/spring")
+    public String getSpring() {
+        return "언젠가.. 봄이 온다면...";
+    }
 }

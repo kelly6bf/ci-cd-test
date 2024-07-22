@@ -4,7 +4,6 @@ on:
   push:
     branches: [ "main" ]
 
-permissions: write-all
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -22,7 +21,6 @@ jobs:
       run: |
         rm -rf ./src/main/resources/application.yml
         touch ./src/main/resources/application.yml
-
         echo ${{secrets.PRODYML}} | base64 --decode > ./src/main/resources/application.yml
       shell: bash
 
@@ -60,6 +58,5 @@ jobs:
         script_stop: true
         script: |
           docker compose -f $COMPOSE down
-          docker rmi -f ${{secrets.DOCKER_REPO}}/coduo_springboot_app:latest
           docker pull ${{secrets.DOCKER_REPO}}/coduo_springboot_app:latest
           docker compose -f $COMPOSE up -d
