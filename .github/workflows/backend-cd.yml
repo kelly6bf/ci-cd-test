@@ -63,5 +63,6 @@ jobs:
         script_stop: true
         script: |
           docker compose -f $COMPOSE down
+          docker rmi -f ${{secrets.DOCKER_REPO}}/coduo_springboot_app:latest
           docker pull ${{secrets.DOCKER_REPO}}/coduo_springboot_app:latest
           docker compose -f $COMPOSE up -d
