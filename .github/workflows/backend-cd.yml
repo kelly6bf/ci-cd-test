@@ -39,16 +39,13 @@ jobs:
     - name: Grant Execute Permission For Gradlew
       run: chmod +x gradlew
 
-    - name: gradlew clean
-      run: ./gradlew clean
-
     - name: Build With Gradle
       run: ./gradlew build -x test
 
     - name: Docker build & Push
       run: |
         docker login -u ${{secrets.DOCKER_ID}} -p ${{secrets.DOCKER_PASSWORD}}
-        docker build -t ${{secrets.DOCKER_REPO}}/coduo_springboot_app:latest .
+        docker buildx build --platform=linux/arm64 -t ${{secrets.DOCKER_REPO}}/coduo_springboot_app:latest .
         docker push ${{ secrets.DOCKER_REPO }}/coduo_springboot_app:latest
 
     - name: Deploy Images with Docker compose
