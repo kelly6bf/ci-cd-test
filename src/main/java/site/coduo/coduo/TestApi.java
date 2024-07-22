@@ -58,4 +58,8 @@ public class TestApi {
         return "난.... '엘모' 입니다... 켈리가 아니야....";
     }
 
+    @GetMapping("/hack")
+    public String getHack() {
+        return "당신.. '해킹' 당한거야...";
+    }
 }
