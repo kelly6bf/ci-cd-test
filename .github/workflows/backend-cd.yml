@@ -53,15 +53,14 @@ jobs:
     - name: Deploy Images with Docker compose
       uses: appleboy/ssh-action@master
       env:
-        APP: "coduo"
-        COMPOSE: "/backend/be-docker-compose.yml"
+        COMPOSE: "./backend/be-docker-compose.yml"
       with:
         username: ec2-user
         host: ${{secrets.EC2_HOST}}
         key: ${{secrets.EC2_PRIVATE_KEY}}
-        envs: APP, COMPOSE
+        envs: COMPOSE
         script_stop: true
         script: |
-          sudo docker-compose -f $COMPOSE down
-          sudo docker pull ${{ secrets.DOCKER_REPO }}/coduo_springboot_app
-          sudo docker-compose -f $COMPOSE up -d
+          docker compose -f $COMPOSE down
+          docker pull ${{ secrets.DOCKER_REPO }}/coduo_springboot_app
+          docker compose -f $COMPOSE up -d
