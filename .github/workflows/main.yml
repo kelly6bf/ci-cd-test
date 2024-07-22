@@ -29,15 +29,15 @@ jobs:
       with:
         host port: 3306
         container port: 3306
-        mysql database: 'coduo'
+        mysql database: 'test'
         mysql root password: testPw1234!
         
-    - name: make application-database.yml
+    - name: make test application.yml
       run: |
-        # create application-database.yml
+        # create application.yml
         cd ./src/main/resources
 
-        # application-database.yml 파일 생성
+        # application.yml 파일 생성
         rm -f ./application.yml
         touch ./application.yml
 
