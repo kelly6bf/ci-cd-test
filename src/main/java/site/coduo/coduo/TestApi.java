@@ -72,4 +72,9 @@ public class TestApi {
     public String getWooteco() {
         return "이곳은.. 신성한 우테코다!";
     }
+
+    @GetMapping("/redy")
+    public String getRedy() {
+        return "레디가 만들어 달라고 해서 만든 API";
+    }
 }
