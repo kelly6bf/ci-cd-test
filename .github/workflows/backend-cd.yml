@@ -50,13 +50,14 @@ jobs:
       uses: appleboy/ssh-action@master
       env:
         COMPOSE: "./backend/be-docker-compose.yml"
+        PROJECT: "coduo-backend"
       with:
         username: ec2-user
         host: ${{ secrets.EC2_HOST }}
         key: ${{ secrets.EC2_PRIVATE_KEY }}
-        envs: COMPOSE
+        envs: COMPOSE, PROJECT
         script_stop: true
         script: |
-          docker compose -f $COMPOSE down
+          docker compose -f $COMPOSE -p $PROJECT down
           docker pull ${{ secrets.DOCKER_REPO }}/coduo_springboot_app:latest
-          docker compose -f $COMPOSE up -d
+          docker compose -f $COMPOSE -p $PROJECT up -d
