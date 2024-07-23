@@ -15,13 +15,13 @@ jobs:
       uses: actions/setup-java@v3
       with:
         java-version: '17'
-        distribution: 'temurin'
+        distribution: 'corretto'
         
-    - name: make prod application.yml
+    - name: Make prod application.yml
       run: |
         rm -rf ./src/main/resources/application.yml
         touch ./src/main/resources/application.yml
-        echo ${{secrets.PRODYML}} | base64 --decode > ./src/main/resources/application.yml
+        echo ${{ secrets.PRODYML }} | base64 --decode > ./src/main/resources/application.yml
       shell: bash
 
     - name: Gradle Caching
@@ -42,8 +42,8 @@ jobs:
 
     - name: Docker build & Push
       run: |
-        docker login -u ${{secrets.DOCKER_ID}} -p ${{secrets.DOCKER_PASSWORD}}
-        docker buildx build --platform=linux/arm64 -t ${{secrets.DOCKER_REPO}}/coduo_springboot_app:latest .
+        docker login -u ${{ secrets.DOCKER_ID }} -p ${{ secrets.DOCKER_PASSWORD }}
+        docker buildx build --platform=linux/arm64 -t ${{ secrets.DOCKER_REPO }}/coduo_springboot_app:latest .
         docker push ${{ secrets.DOCKER_REPO }}/coduo_springboot_app:latest
 
     - name: Deploy Images with Docker compose
@@ -52,11 +52,11 @@ jobs:
         COMPOSE: "./backend/be-docker-compose.yml"
       with:
         username: ec2-user
-        host: ${{secrets.EC2_HOST}}
-        key: ${{secrets.EC2_PRIVATE_KEY}}
+        host: ${{ secrets.EC2_HOST }}
+        key: ${{ secrets.EC2_PRIVATE_KEY }}
         envs: COMPOSE
         script_stop: true
         script: |
           docker compose -f $COMPOSE down
-          docker pull ${{secrets.DOCKER_REPO}}/coduo_springboot_app:latest
+          docker pull ${{ secrets.DOCKER_REPO }}/coduo_springboot_app:latest
           docker compose -f $COMPOSE up -d
