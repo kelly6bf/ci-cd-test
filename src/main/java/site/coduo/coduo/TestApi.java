@@ -77,4 +77,9 @@ public class TestApi {
     public String getRedy() {
         return "레디가 만들어 달라고 해서 만든 API";
     }
+
+    @GetMapping("/sun")
+    public String getSun() {
+        return "당신인가요... 나의 태양...?";
+    }
 }
