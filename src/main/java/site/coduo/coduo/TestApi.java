@@ -67,4 +67,9 @@ public class TestApi {
     public String getSpring() {
         return "언젠가.. 봄이 온다면...";
     }
+
+    @GetMapping("/wooteco")
+    public String getWooteco() {
+        return "이곳은.. 신성한 우테코다!";
+    }
 }
