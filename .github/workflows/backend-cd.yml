@@ -47,17 +47,8 @@ jobs:
         docker push ${{ secrets.DOCKER_REPO }}/coduo_springboot_app:latest
 
     - name: Deploy Images with Docker compose
-      uses: appleboy/ssh-action@master
-      env:
-        COMPOSE: "./backend/be-docker-compose.yml"
-        PROJECT: "coduo-backend"
-      with:
-        username: ec2-user
-        host: ${{ secrets.EC2_HOST }}
-        key: ${{ secrets.EC2_PRIVATE_KEY }}
-        envs: COMPOSE, PROJECT
-        script_stop: true
-        script: |
-          docker compose -f $COMPOSE -p $PROJECT down
-          docker pull ${{ secrets.DOCKER_REPO }}/coduo_springboot_app:latest
-          docker compose -f $COMPOSE -p $PROJECT up -d
+      run: |
+        docker compose -f ~/docker-compose.yml down
+        docker rmi -f ${{ secrets.DOCKER_REPO }}/kelly6bf/coduo_springboot_app
+        docker pull ${{ secrets.DOCKER_REPO }}/kelly6bf/coduo_springboot_app
+        docker compose -f ~/docker-compose.yml up -d
