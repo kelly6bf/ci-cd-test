@@ -87,4 +87,9 @@ public class TestApi {
     public String getKey() {
         return "용서해라 켈리... 이것이.. 나의 마지막 '키'다!";
     }
+
+    @GetMapping("/a")
+    public String a() {
+        return "우린.. 열정의 A!";
+    }
 }
