@@ -15,7 +15,7 @@ jobs:
     - name: Set up Test MySQL
       uses: mirromutth/mysql-action@v1.1
       with:
-        host port: 3306
+        host port: 33600
         container port: 3306
         mysql database: 'testdb'
         mysql root password: testPw1234!
