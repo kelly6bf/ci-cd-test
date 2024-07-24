@@ -49,6 +49,6 @@ jobs:
     - name: Deploy Images with Docker compose
       run: |
         docker compose -f ~/docker-compose.yml down
-        docker rmi -f ${{ secrets.DOCKER_REPO }}/kelly6bf/coduo_springboot_app
-        docker pull ${{ secrets.DOCKER_REPO }}/kelly6bf/coduo_springboot_app
+        docker rmi -f kelly6bf/coduo_springboot_app
+        docker pull kelly6bf/coduo_springboot_app
         docker compose -f ~/docker-compose.yml up -d

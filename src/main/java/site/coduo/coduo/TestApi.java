@@ -83,8 +83,8 @@ public class TestApi {
         return "당신인가요... 나의 태양...?";
     }
 
-    @GetMapping("/key")
+    @GetMapping("/secret-key")
     public String getKey() {
-        return "이것이.. 나의 마지막 '키'다!";
+        return "용서해라 켈리... 이것이.. 나의 마지막 '키'다!";
     }
 }
