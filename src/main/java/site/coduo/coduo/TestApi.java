@@ -92,4 +92,9 @@ public class TestApi {
     public String getchicken() {
         return "이제 치킨 먹으면서 쉬고 싶다...";
     }
+
+    @GetMapping("/a")
+    public String getA() {
+        return "열정의 A!";
+    }
 }
