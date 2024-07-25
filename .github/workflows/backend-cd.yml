@@ -5,44 +5,47 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build-and-deploy:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: Make prod application.yml
+        run: |
+          rm -rf ./src/main/resources/application.yml
+          touch ./src/main/resources/application.yml
+          echo ${{ secrets.PRODYML }} | base64 --decode > ./src/main/resources/application.yml
+        shell: bash
+
+      - name: Gradle Caching
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Grant Execute Permission For Gradlew
+        run: chmod +x gradlew
+
+      - name: Build With Gradle
+        run: ./gradlew build -x test
+
+      - name: Docker build & Push
+        run: |
+          docker login -u ${{ secrets.DOCKER_ID }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker buildx build --platform=linux/arm64 -t kelly6bf/springboot-app .
+          docker push kelly6bf/springboot-app
+
+  deploy:
     runs-on: coduo-backend-ec2
     steps:
-    - name: checkout
-      uses: actions/checkout@v3
-
-    - name: Make prod application.yml
-      run: |
-        rm -rf ./src/main/resources/application.yml
-        touch ./src/main/resources/application.yml
-        echo ${{ secrets.PRODYML }} | base64 --decode > ./src/main/resources/application.yml
-      shell: bash
-
-    - name: Gradle Caching
-      uses: actions/cache@v3
-      with:
-        path: |
-          ~/.gradle/caches
-          ~/.gradle/wrapper
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-        restore-keys: |
-          ${{ runner.os }}-gradle-
-    
-    - name: Grant Execute Permission For Gradlew
-      run: chmod +x gradlew
-
-    - name: Build With Gradle
-      run: ./gradlew build -x test
-
-    - name: Docker build & Push
-      run: |
-        docker login -u ${{ secrets.DOCKER_ID }} -p ${{ secrets.DOCKER_PASSWORD }}
-        docker buildx build --platform=linux/arm64 -t ${{ secrets.DOCKER_REPO }}/coduo_springboot_app:latest .
-        docker push ${{ secrets.DOCKER_REPO }}/coduo_springboot_app:latest
-
-    - name: Deploy Images with Docker compose
-      run: |
-        docker compose -f ~/docker-compose.yml down
-        docker rmi -f kelly6bf/coduo_springboot_app
-        docker pull kelly6bf/coduo_springboot_app
-        docker compose -f ~/docker-compose.yml up -d
+      - name: Deploy Images with Docker compose
+        run: |
+          docker compose -f ~/docker-compose.yml down
+          docker rmi -f kelly6bf/springboot-app
+          docker pull kelly6bf/springboot-app
+          docker compose -f ~/docker-compose.yml up -d
