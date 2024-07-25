@@ -47,6 +47,7 @@ jobs:
           docker push kelly6bf/springboot-app
 
   deploy:
+    needs: build
     runs-on: coduo-backend-ec2
     steps:
       - name: Deploy Images with Docker compose
